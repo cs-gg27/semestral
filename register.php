@@ -20,9 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt->num_rows > 0) {
         echo "Este correo ya está registrado.";
     } else {
-        // Insertar nuevo usuario
-        $stmt = $cnn->prepare("INSERT INTO usuarios (nombre, apellido, correo, password_hash, direccion) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $nombre, $apellido, $correo, $password, $direccion);
+        
+        // Llamada al procedimiento almacenado InsertarUsuario
+        $stmt = $cnn->prepare("CALL InsertarUsuario(?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $nombre, $apellido, $correo, $hashed_password, $direccion);
+        $stmt->execute();
+
 
         if ($stmt->execute()) {
             echo "Usuario registrado correctamente.";
@@ -146,4 +149,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
