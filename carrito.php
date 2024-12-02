@@ -33,8 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
             $query_usuario->close();
 
             // Insertar la compra en la tabla
-            $stmt = $cnn->prepare("INSERT INTO compras (user_id, nombre_usuario, libro_id, titulo_libro, fecha_compra, precio) VALUES (?, ?, ?, ?, NOW(), ?)");
+            // Llamar al Stored Procedure para registrar la compra
+            $stmt = $cnn->prepare("CALL InsertarCompra(?, ?, ?, ?, ?)");
             $stmt->bind_param("isisi", $user_id, $nombre_usuario, $libro_id, $titulo, $precio);
+
             $stmt->execute();
             $stmt->close();
         }
@@ -178,3 +180,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar_compra'])) 
   <p>&copy; 2024 Torre de Libros. Todos los derechos reservados.</p>
 </footer>
 </html>
+
