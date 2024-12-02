@@ -22,8 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->close(); // Cerramos el primer statement antes de crear el segundo
 
-            $update_stmt = $conn->prepare("UPDATE usuarios SET password_hash = ? WHERE correo = ?");
-            $update_stmt->bind_param("ss", $hashed_password, $correo);
+            // Llamar al Stored Procedure
+            $update_stmt = $conn->prepare("CALL ActualizarPassword(?, ?)");
+            $update_stmt->bind_param("ss", $correo, $hashed_password);
 
             if ($update_stmt->execute()) {
                 $message = "La contraseña ha sido actualizada correctamente.";
